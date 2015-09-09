@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String wifiToCheck = "A2K_TECHNOLOGIES";
     private WifiManager wifiMgr;
+    private EditText editText;
 
 
     //create broadcast receiver
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
                     foundNetworkName = scan.SSID;
 
-                    //if A2K network is not found, show dialog
+                    //if network is not found, show dialog
                     if(foundNetworkName.equals(wifiToCheck)){
 
                         Toast.makeText(getApplicationContext(), "SSID is " + foundNetworkName + ", wifiToCheck is " +
@@ -72,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         wifiMgr = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
         registerReceiver(mWifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiMgr.startScan();
+
+        //edit text
+        editText = (EditText)findViewById(R.id.emailEditText);
+        editText.setHint("Enter email address here:");
 
     }
 
@@ -121,6 +128,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         builder.show();
+
+
+    }
+
+
+    public void onLoginButtonPressed(View view) {
+
+        //get email address from text field
+        String emailAddress = editText.getText().toString();
+        //send to authenticate method
+        AppData.getInstance().authenticate(emailAddress);
+        
 
 
     }
